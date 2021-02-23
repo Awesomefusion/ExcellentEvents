@@ -1,10 +1,12 @@
-using MediatR;
-using Domain;
+using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Threading;
-using Persistence;
+using System.Threading.Tasks;
+using Domain;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Persistence;
 
 namespace Application.Activities
 {
@@ -18,13 +20,11 @@ namespace Application.Activities
             public Handler(DataContext context)
             {
                 _context = context;
-
             }
+
             public async Task<List<Activity>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var activities = await _context.Activities.ToListAsync();
-
-                return activities;
+                return await _context.Activities.ToListAsync(cancellationToken);
             }
         }
     }
